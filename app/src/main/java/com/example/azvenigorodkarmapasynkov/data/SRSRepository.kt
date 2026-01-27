@@ -16,6 +16,30 @@ class SRSRepository(private val quizDao: QuizDao) {
     fun getAllItems(): Flow<List<QuizItem>> {
         return quizDao.getAllItems()
     }
+    
+    suspend fun isEmpty(): Boolean {
+        return quizDao.getItemCount() == 0
+    }
+    
+    suspend fun getDistractors(item: QuizItem, count: Int = 3): List<String> {
+        val range = 0.05 // Roughly 5km buffer
+        val nearby = quizDao.getNearbyItems(
+            type = item.type,
+            excludeId = item.id,
+            minLat = item.latitude - range,
+            maxLat = item.latitude + range,
+            minLon = item.longitude - range,
+            maxLon = item.longitude + range,
+            limit = count * 3
+        )
+        
+        if (nearby.size < count) {
+             // Fallback: fetch randoms from DB regardless of location (not implemented in DAO yet, but we could add or just accept fewer)
+             // For now, just return what we have
+        }
+        
+        return nearby.map { it.name }.shuffled().take(count)
+    }
 
     suspend fun addItem(item: QuizItem) {
         quizDao.insertItem(item)

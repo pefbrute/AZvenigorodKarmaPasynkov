@@ -66,7 +66,7 @@ fun MapQuizScreen(viewModel: MapQuizViewModel) {
                                 state.item.longitude,
                                 "Where is this?"
                             )
-                            controller?.centerMap(state.item.latitude, state.item.longitude)
+                            controller?.centerMap(state.item.latitude, state.item.longitude, state.initialZoom.toDouble())
                         }
                     }
                     is QuizState.Result -> {

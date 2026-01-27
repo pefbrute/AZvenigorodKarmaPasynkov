@@ -10,11 +10,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.example.azvenigorodkarmapasynkov.util.GeometryUtils
+import kotlinx.coroutines.flow.first
+import kotlin.math.max
 import org.osmdroid.util.GeoPoint
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
 
 enum class QuizMode {
     SHOW_NAME, // Map centers, User chooses name
@@ -23,7 +22,12 @@ enum class QuizMode {
 
 sealed class QuizState {
     object Loading : QuizState()
-    data class Question(val item: QuizItem, val mode: QuizMode, val options: List<String> = emptyList()) : QuizState()
+    data class Question(
+        val item: QuizItem, 
+        val mode: QuizMode, 
+        val options: List<String> = emptyList(),
+        val initialZoom: Float = 15f
+    ) : QuizState()
     data class Result(
         val item: QuizItem, 
         val success: Boolean, 
@@ -42,35 +46,43 @@ class MapQuizViewModel(private val repository: SRSRepository) : ViewModel() {
 
     private var currentQuizItem: QuizItem? = null
     
-    // Temporary list for demo if DB is empty
-    private val demoItems = listOf(
-        QuizItem(name = "Zvenigorod Kremlin", latitude = 55.7305, longitude = 36.8527, type = QuizType.POINT),
-        QuizItem(name = "Savvino-Starozhevsky Monastery", latitude = 55.7288, longitude = 36.8166, type = QuizType.POINT),
-        QuizItem(name = "Cultural Center", latitude = 55.7330, longitude = 36.8580, type = QuizType.POINT)
-    )
-
     init {
-        loadNextQuestion()
+        // Observer for initial data load or if DB was empty
+        viewModelScope.launch {
+            repository.getDueItems().collect { items ->
+                if (items.isNotEmpty() && currentQuizItem == null) {
+                    loadNextQuestion()
+                } else if (items.isEmpty() && currentQuizItem == null) {
+                    _uiState.value = QuizState.Empty
+                }
+            }
+        }
     }
 
     fun loadNextQuestion() {
         viewModelScope.launch {
-            // In a real app, collect from Repository. For now, pick random demo item or mock flow.
-            // We'll mimic fetching "Due" items.
-            // For MVP, just cycle through demo items or random
+            val dueList = repository.getDueItems().first() // Get current snapshot
             
-            val item = demoItems.random()
-            currentQuizItem = item
-            
-            // Randomly choose mode
-            val mode = if (Math.random() > 0.5) QuizMode.SHOW_NAME else QuizMode.NAME_POKE
-            
-            if (mode == QuizMode.SHOW_NAME) {
-                 // Generate options
-                 val options = (demoItems - item).shuffled().take(3).map { it.name } + item.name
-                 _uiState.value = QuizState.Question(item, mode, options.shuffled())
+            if (dueList.isNotEmpty()) {
+                // For better SRS, picking the one with earliest nextReviewDate would be ideal, 
+                // but random from the "due" pile is fine for now.
+                val item = dueList.random()
+                currentQuizItem = item
+                
+                val mode = if (Math.random() > 0.5) QuizMode.SHOW_NAME else QuizMode.NAME_POKE
+                
+                // Use minZoom for context if available, else default
+                val zoom = if (item.minZoom > 0) item.minZoom else 15f
+                
+                if (mode == QuizMode.SHOW_NAME) {
+                     val distractors = repository.getDistractors(item)
+                     val options = (distractors + item.name).shuffled()
+                     _uiState.value = QuizState.Question(item, mode, options, initialZoom = zoom)
+                } else {
+                    _uiState.value = QuizState.Question(item, mode, initialZoom = zoom)
+                }
             } else {
-                _uiState.value = QuizState.Question(item, mode)
+                _uiState.value = QuizState.Empty
             }
         }
     }
@@ -81,8 +93,7 @@ class MapQuizViewModel(private val repository: SRSRepository) : ViewModel() {
         val quality = if (success) 5 else 0
         
         viewModelScope.launch {
-            // Save result (if item was in DB)
-            // repository.processReview(item, quality)
+            repository.processReview(item, quality)
             
             _uiState.value = QuizState.Result(
                 item = item,
@@ -97,41 +108,32 @@ class MapQuizViewModel(private val repository: SRSRepository) : ViewModel() {
 
     fun submitLocation(geoPoint: GeoPoint) {
         val item = currentQuizItem ?: return
-        val correctPoint = GeoPoint(item.latitude, item.longitude)
-        val distance = calculateDistanceIds(geoPoint, correctPoint)
         
-        // Define tolerance, e.g., 100 meters
-        val success = distance < 100 
-        val quality = if (success) 5 else if (distance < 500) 3 else 0
+        // Adaptive Radius Logic
+        // Base start: item.baseRadius. As mastery increases (successfulReviews), radius decreases.
+        // E.g. 5 successful reviews -> 150 - 100 = 50m.
+        val baseRadius = item.baseRadius.toDouble()
+        val masteryReduction = (item.successfulReviews * 20.0).coerceAtMost(baseRadius * 0.8) // Don't reduce to 0
+        val allowedRadius = max(30.0, baseRadius - masteryReduction)
+
+        val distance = GeometryUtils.calculateDistanceToItem(geoPoint, item)
+        
+        val success = distance < allowedRadius 
+        // Quality based on closeness relative to allowed radius
+        val quality = if (success) 5 else if (distance < allowedRadius * 2.5) 2 else 0
 
          viewModelScope.launch {
-            // Save result
-             // repository.processReview(item, quality)
+             repository.processReview(item, quality)
              
              _uiState.value = QuizState.Result(
                  item = item,
                  success = success,
-                 correctLocation = correctPoint,
+                 correctLocation = GeoPoint(item.latitude, item.longitude),
                  userLocation = geoPoint,
                  distance = distance,
-                 message = "Distance: ${distance.toInt()}m. ${if (success) "Great!" else "Too far!"}"
+                 message = "Distance: ${distance.toInt()}m (Limit: ${allowedRadius.toInt()}m). ${if (success) "Great!" else "Too far!"}"
              )
          }
-    }
-    
-    private fun calculateDistanceIds(p1: GeoPoint, p2: GeoPoint): Double {
-        val R = 6371e3 // metres
-        val phi1 = p1.latitude * Math.PI / 180
-        val phi2 = p2.latitude * Math.PI / 180
-        val deltaPhi = (p2.latitude - p1.latitude) * Math.PI / 180
-        val deltaLambda = (p2.longitude - p1.longitude) * Math.PI / 180
-
-        val a = sin(deltaPhi / 2) * sin(deltaPhi / 2) +
-                cos(phi1) * cos(phi2) *
-                sin(deltaLambda / 2) * sin(deltaLambda / 2)
-        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-        return R * c
     }
 }
 
