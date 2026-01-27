@@ -1,0 +1,35 @@
+package com.example.azvenigorodkarmapasynkov
+
+import android.os.Bundle
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.lifecycle.ViewModelProvider
+import com.example.azvenigorodkarmapasynkov.data.QuizDatabase
+import com.example.azvenigorodkarmapasynkov.data.SRSRepository
+import com.example.azvenigorodkarmapasynkov.ui.MapQuizScreen
+import com.example.azvenigorodkarmapasynkov.ui.MapQuizViewModel
+import com.example.azvenigorodkarmapasynkov.ui.MapQuizViewModelFactory
+import com.example.azvenigorodkarmapasynkov.ui.theme.AZvenigorodKarmaPasynkovTheme
+
+class MainActivity : ComponentActivity() {
+    private val TAG = "AZvenigorodLog"
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "MainActivity created successfully!")
+
+        
+        // Manual dependency injection for MVP
+        val database = QuizDatabase.getDatabase(this)
+        val repository = SRSRepository(database.quizDao())
+        val factory = MapQuizViewModelFactory(repository)
+        val viewModel = ViewModelProvider(this, factory)[MapQuizViewModel::class.java]
+
+        setContent {
+            AZvenigorodKarmaPasynkovTheme {
+                MapQuizScreen(viewModel = viewModel)
+            }
+        }
+    }
+}
