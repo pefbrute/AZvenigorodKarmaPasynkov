@@ -14,6 +14,7 @@ data class QuizItem(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val description: String = "",
+    val imageName: String? = null, // Name of drawable resource
     val latitude: Double, // Center for point, or label position
     val longitude: Double,
     val type: QuizType = QuizType.POINT,
@@ -29,11 +30,17 @@ data class QuizItem(
     val bboxMinLon: Double = 0.0,
     val bboxMaxLon: Double = 0.0,
 
-    // SRS fields
-    val nextReviewDate: Long = 0, // Timestamp
-    val interval: Int = 0, // Days
-    val easeFactor: Float = 2.5f,
-    val successfulReviews: Int = 0,
+    // SRS fields for Map
+    val nextReviewDateMap: Long = 0, // Timestamp
+    val intervalMap: Int = 0, // Days
+    val easeFactorMap: Float = 2.5f,
+    val successfulReviewsMap: Int = 0,
+
+    // SRS fields for Image
+    val nextReviewDateImage: Long = 0, // Timestamp
+    val intervalImage: Int = 0, // Days
+    val easeFactorImage: Float = 2.5f,
+    val successfulReviewsImage: Int = 0,
     
     // Config
     val baseRadius: Int = 150

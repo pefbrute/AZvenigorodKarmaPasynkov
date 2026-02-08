@@ -6,11 +6,17 @@ import java.util.Calendar
 import kotlin.math.max
 import kotlin.math.roundToInt
 
+import com.example.azvenigorodkarmapasynkov.ui.GameMode
+
 class SRSRepository(private val quizDao: QuizDao) {
 
 
-    fun getDueItems(): Flow<List<QuizItem>> {
-        return quizDao.getItemsDueForReview(System.currentTimeMillis())
+    fun getDueItems(mode: GameMode): Flow<List<QuizItem>> {
+        val currentTime = System.currentTimeMillis()
+        return when (mode) {
+             GameMode.IMAGE_QUIZ -> quizDao.getItemsDueForImageReview(currentTime)
+             else -> quizDao.getItemsDueForMapReview(currentTime)
+        }
     }
 
     fun getAllItems(): Flow<List<QuizItem>> {
@@ -54,15 +60,19 @@ class SRSRepository(private val quizDao: QuizDao) {
      * @param item The quiz item.
      * @param quality 0-5 rating. (0: blackout, 5: perfect)
      */
-    suspend fun processReview(item: QuizItem, quality: Int) {
+    suspend fun processReview(item: QuizItem, quality: Int, mode: GameMode) {
         // SM-2 Algorithm
         // q: 0-5
         // EF' = EF + (0.1 - (5-q)*(0.08 + (5-q)*0.02))
         // If q < 3, start repetitions over from count 1.
         
+        var interval = if (mode == GameMode.IMAGE_QUIZ) item.intervalImage else item.intervalMap
+        var easeFactor = if (mode == GameMode.IMAGE_QUIZ) item.easeFactorImage else item.easeFactorMap
+        var successfulReviews = if (mode == GameMode.IMAGE_QUIZ) item.successfulReviewsImage else item.successfulReviewsMap
+        
         var newInterval: Int
-        var newEF = item.easeFactor
-        var newSuccessfulReviews = item.successfulReviews
+        var newEF = easeFactor
+        var newSuccessfulReviews = successfulReviews
 
         if (quality >= 3) {
             newSuccessfulReviews += 1
@@ -71,7 +81,7 @@ class SRSRepository(private val quizDao: QuizDao) {
             } else if (newSuccessfulReviews == 2) {
                 newInterval = 6
             } else {
-                newInterval = (item.interval * newEF).roundToInt()
+                newInterval = (interval * newEF).roundToInt()
             }
             
             newEF = newEF + (0.1f - (5 - quality) * (0.08f + (5 - quality) * 0.02f))
@@ -79,20 +89,27 @@ class SRSRepository(private val quizDao: QuizDao) {
         } else {
             newSuccessfulReviews = 0
             newInterval = 1
-            // EF stays same or could decrease, standard SM-2 keeps it same or decreases slightly.
-            // Let's keep EF same for simplicity on failure to reset chain.
         }
 
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, newInterval)
         val newNextReviewDate = calendar.timeInMillis
 
-        val updatedItem = item.copy(
-            interval = newInterval,
-            easeFactor = newEF,
-            successfulReviews = newSuccessfulReviews,
-            nextReviewDate = newNextReviewDate
-        )
+        val updatedItem = if (mode == GameMode.IMAGE_QUIZ) {
+             item.copy(
+                intervalImage = newInterval,
+                easeFactorImage = newEF,
+                successfulReviewsImage = newSuccessfulReviews,
+                nextReviewDateImage = newNextReviewDate
+            )
+        } else {
+             item.copy(
+                intervalMap = newInterval,
+                easeFactorMap = newEF,
+                successfulReviewsMap = newSuccessfulReviews,
+                nextReviewDateMap = newNextReviewDate
+            )
+        }
 
         quizDao.updateItem(updatedItem)
     }

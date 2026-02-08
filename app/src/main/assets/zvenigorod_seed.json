@@ -2,36 +2,296 @@
   "datasetId": "zvenigorod_seed_v1",
   "defaultAnswerRadiusM": 120,
   "items": [
-    {"id":"zvg_savvino_monastery","name":"Саввино-Сторожевский монастырь","alts":["Саввино-Сторожевский ставропигиальный монастырь"],"kind":"monastery","group":"monastery","lat":55.727575,"lon":36.816502,"answerRadiusM":180},
-    {"id":"zvg_savvino_museum_reserve","name":"Музей-заповедник (Саввино-Сторожевский монастырь)","alts":["Музей-заповедник"],"kind":"museum","group":"monastery","lat":55.728232,"lon":36.816791,"answerRadiusM":180},
-    {"id":"zvg_palace_alexey_mikhailovich","name":"Дворец царя Алексея Михайловича","alts":["Царский дворец"],"kind":"historic_building","group":"monastery","lat":55.727916,"lon":36.815719,"answerRadiusM":120},
-    {"id":"zvg_savvino_hotel","name":"Гостиница Саввино-Сторожевского монастыря","alts":["Гостиница при монастыре"],"kind":"lodging","group":"monastery","lat":55.730086,"lon":36.816326,"answerRadiusM":140},
-
-    {"id":"zvg_assumption_cathedral_gorodok","name":"Собор Успения Пресвятой Богородицы (Городок)","alts":["Успенский собор на Городке"],"kind":"cathedral","group":"historic_center","lat":55.733016,"lon":36.840187,"answerRadiusM":160},
-    {"id":"zvg_gorodishche","name":"Звенигородское городище","alts":["Городище"],"kind":"archaeology_site","group":"historic_center","lat":55.732450,"lon":36.839433,"answerRadiusM":220},
-
-    {"id":"zvg_manege","name":"Звенигородский манеж","alts":["Манеж"],"kind":"museum","group":"center","lat":55.729904,"lon":36.859464,"answerRadiusM":130},
-    {"id":"zvg_orlova_culture_center","name":"Культурный центр им. Любови Орловой","alts":["КЦ Любови Орловой"],"kind":"culture_center","group":"center","lat":55.730486,"lon":36.855346,"answerRadiusM":120},
-    {"id":"zvg_orlova_monument","name":"Памятник Любови Орловой","alts":["Орлова"],"kind":"monument","group":"center","lat":55.730230,"lon":36.855172,"answerRadiusM":90},
-    {"id":"zvg_museum_russian_dessert","name":"Музей русского десерта","alts":["Русский десерт"],"kind":"museum","group":"center","lat":55.730899,"lon":36.848332,"answerRadiusM":120},
-
-    {"id":"zvg_chekhov_monument","name":"Памятник А. П. Чехову","alts":["Чехов (памятник)"],"kind":"monument","group":"center","lat":55.729935,"lon":36.853750,"answerRadiusM":90},
-    {"id":"zvg_chekhov_house_marker","name":"Домик Чехова (земская больница) — инфостенд","alts":["Дом Чехова (инфостенд)"],"kind":"historic_place","group":"center","lat":55.732822,"lon":36.849386,"answerRadiusM":120},
-
-    {"id":"zvg_kupchiy_dvor","name":"Купчий двор","alts":["Торговые ряды"],"kind":"historic_building","group":"center","lat":55.729542,"lon":36.856404,"answerRadiusM":120},
-    {"id":"zvg_ascension_cathedral","name":"Вознесенский собор","alts":["Собор Вознесения"],"kind":"cathedral","group":"center","lat":55.730338,"lon":36.851245,"answerRadiusM":150},
-    {"id":"zvg_alexander_nevsky_church","name":"Храм Александра Невского","alts":["Церковь Александра Невского"],"kind":"church","group":"center","lat":55.729365,"lon":36.860531,"answerRadiusM":150},
-    {"id":"zvg_city_park","name":"Городской парк","alts":["Парк Звенигорода"],"kind":"park","group":"center","lat":55.730573,"lon":36.850131,"answerRadiusM":260},
-
-    {"id":"zvg_hospital_cgb","name":"Звенигородская ЦГБ","alts":["Городская больница"],"kind":"hospital","group":"infrastructure","lat":55.735487,"lon":36.848171,"answerRadiusM":200},
-    {"id":"zvg_polyclinic","name":"Звенигородская поликлиника","alts":["Поликлиника (Герцена)"],"kind":"clinic","group":"infrastructure","lat":55.737715,"lon":36.856607,"answerRadiusM":200},
-
-    {"id":"zvg_railway_station","name":"Ж/д вокзал Звенигород","alts":["Станция Звенигород (ж/д)"],"kind":"rail_station","group":"transport","lat":55.700184,"lon":36.881111,"answerRadiusM":220},
-    {"id":"zvg_bus_stop_station","name":"Остановка «Станция Звенигород»","alts":["Станция (остановка)"],"kind":"bus_stop","group":"transport","lat":55.700779,"lon":36.882410,"answerRadiusM":120},
-
-    {"id":"zvg_quarter_mayakovsky","name":"Квартал им. Маяковского","alts":["Квартал Маяковского"],"kind":"district_anchor","group":"districts","lat":55.740702,"lon":36.860522,"answerRadiusM":600},
-    {"id":"zvg_micro_suponevo","name":"Микрорайон Супонево","alts":["Супонево"],"kind":"district_anchor","group":"districts","lat":55.744332,"lon":36.879407,"answerRadiusM":650},
-    {"id":"zvg_upper_posad","name":"Верхний Посад","alts":["мкр Верхний Посад"],"kind":"district_anchor","group":"districts","lat":55.725798,"lon":36.840112,"answerRadiusM":650},
-    {"id":"zvg_micro_vostochny","name":"Микрорайон Восточный","alts":["Восточный"],"kind":"district_anchor","group":"districts","lat":55.725119,"lon":36.873233,"answerRadiusM":700}
+    {
+      "id": "zvg_savvino_monastery",
+      "name": "Саввино-Сторожевский монастырь",
+      "alts": [
+        "Саввино-Сторожевский ставропигиальный монастырь"
+      ],
+      "kind": "monastery",
+      "group": "monastery",
+      "lat": 55.727575,
+      "lon": 36.816502,
+      "answerRadiusM": 180,
+      "imageName": "zvg_savvino"
+    },
+    {
+      "id": "zvg_savvino_museum_reserve",
+      "name": "Музей-заповедник (Саввино-Сторожевский монастырь)",
+      "alts": [
+        "Музей-заповедник"
+      ],
+      "kind": "museum",
+      "group": "monastery",
+      "lat": 55.728232,
+      "lon": 36.816791,
+      "answerRadiusM": 180
+    },
+    {
+      "id": "zvg_palace_alexey_mikhailovich",
+      "name": "Дворец царя Алексея Михайловича",
+      "alts": [
+        "Царский дворец"
+      ],
+      "kind": "historic_building",
+      "group": "monastery",
+      "lat": 55.727916,
+      "lon": 36.815719,
+      "answerRadiusM": 120
+    },
+    {
+      "id": "zvg_savvino_hotel",
+      "name": "Гостиница Саввино-Сторожевского монастыря",
+      "alts": [
+        "Гостиница при монастыре"
+      ],
+      "kind": "lodging",
+      "group": "monastery",
+      "lat": 55.730086,
+      "lon": 36.816326,
+      "answerRadiusM": 140
+    },
+    {
+      "id": "zvg_assumption_cathedral_gorodok",
+      "name": "Собор Успения Пресвятой Богородицы (Городок)",
+      "alts": [
+        "Успенский собор на Городке"
+      ],
+      "kind": "cathedral",
+      "group": "historic_center",
+      "lat": 55.733016,
+      "lon": 36.840187,
+      "answerRadiusM": 160,
+      "imageName": "zvg_assumption"
+    },
+    {
+      "id": "zvg_gorodishche",
+      "name": "Звенигородское городище",
+      "alts": [
+        "Городище"
+      ],
+      "kind": "archaeology_site",
+      "group": "historic_center",
+      "lat": 55.732450,
+      "lon": 36.839433,
+      "answerRadiusM": 220
+    },
+    {
+      "id": "zvg_manege",
+      "name": "Звенигородский манеж",
+      "alts": [
+        "Манеж"
+      ],
+      "kind": "museum",
+      "group": "center",
+      "lat": 55.729904,
+      "lon": 36.859464,
+      "answerRadiusM": 130
+    },
+    {
+      "id": "zvg_orlova_culture_center",
+      "name": "Культурный центр им. Любови Орловой",
+      "alts": [
+        "КЦ Любови Орловой"
+      ],
+      "kind": "culture_center",
+      "group": "center",
+      "lat": 55.730486,
+      "lon": 36.855346,
+      "answerRadiusM": 120
+    },
+    {
+      "id": "zvg_orlova_monument",
+      "name": "Памятник Любови Орловой",
+      "alts": [
+        "Орлова"
+      ],
+      "kind": "monument",
+      "group": "center",
+      "lat": 55.730230,
+      "lon": 36.855172,
+      "answerRadiusM": 90
+    },
+    {
+      "id": "zvg_museum_russian_dessert",
+      "name": "Музей русского десерта",
+      "alts": [
+        "Русский десерт"
+      ],
+      "kind": "museum",
+      "group": "center",
+      "lat": 55.730899,
+      "lon": 36.848332,
+      "answerRadiusM": 120
+    },
+    {
+      "id": "zvg_chekhov_monument",
+      "name": "Памятник А. П. Чехову",
+      "alts": [
+        "Чехов (памятник)"
+      ],
+      "kind": "monument",
+      "group": "center",
+      "lat": 55.729935,
+      "lon": 36.853750,
+      "answerRadiusM": 90,
+      "imageName": "zvg_chekhov"
+    },
+    {
+      "id": "zvg_chekhov_house_marker",
+      "name": "Домик Чехова (земская больница) — инфостенд",
+      "alts": [
+        "Дом Чехова (инфостенд)"
+      ],
+      "kind": "historic_place",
+      "group": "center",
+      "lat": 55.732822,
+      "lon": 36.849386,
+      "answerRadiusM": 120
+    },
+    {
+      "id": "zvg_kupchiy_dvor",
+      "name": "Купчий двор",
+      "alts": [
+        "Торговые ряды"
+      ],
+      "kind": "historic_building",
+      "group": "center",
+      "lat": 55.729542,
+      "lon": 36.856404,
+      "answerRadiusM": 120
+    },
+    {
+      "id": "zvg_ascension_cathedral",
+      "name": "Вознесенский собор",
+      "alts": [
+        "Собор Вознесения"
+      ],
+      "kind": "cathedral",
+      "group": "center",
+      "lat": 55.730338,
+      "lon": 36.851245,
+      "answerRadiusM": 150
+    },
+    {
+      "id": "zvg_alexander_nevsky_church",
+      "name": "Храм Александра Невского",
+      "alts": [
+        "Церковь Александра Невского"
+      ],
+      "kind": "church",
+      "group": "center",
+      "lat": 55.729365,
+      "lon": 36.860531,
+      "answerRadiusM": 150
+    },
+    {
+      "id": "zvg_city_park",
+      "name": "Городской парк",
+      "alts": [
+        "Парк Звенигорода"
+      ],
+      "kind": "park",
+      "group": "center",
+      "lat": 55.730573,
+      "lon": 36.850131,
+      "answerRadiusM": 260
+    },
+    {
+      "id": "zvg_hospital_cgb",
+      "name": "Звенигородская ЦГБ",
+      "alts": [
+        "Городская больница"
+      ],
+      "kind": "hospital",
+      "group": "infrastructure",
+      "lat": 55.735487,
+      "lon": 36.848171,
+      "answerRadiusM": 200
+    },
+    {
+      "id": "zvg_polyclinic",
+      "name": "Звенигородская поликлиника",
+      "alts": [
+        "Поликлиника (Герцена)"
+      ],
+      "kind": "clinic",
+      "group": "infrastructure",
+      "lat": 55.737715,
+      "lon": 36.856607,
+      "answerRadiusM": 200
+    },
+    {
+      "id": "zvg_railway_station",
+      "name": "Ж/д вокзал Звенигород",
+      "alts": [
+        "Станция Звенигород (ж/д)"
+      ],
+      "kind": "rail_station",
+      "group": "transport",
+      "lat": 55.700184,
+      "lon": 36.881111,
+      "answerRadiusM": 220
+    },
+    {
+      "id": "zvg_bus_stop_station",
+      "name": "Остановка «Станция Звенигород»",
+      "alts": [
+        "Станция (остановка)"
+      ],
+      "kind": "bus_stop",
+      "group": "transport",
+      "lat": 55.700779,
+      "lon": 36.882410,
+      "answerRadiusM": 120
+    },
+    {
+      "id": "zvg_quarter_mayakovsky",
+      "name": "Квартал им. Маяковского",
+      "alts": [
+        "Квартал Маяковского"
+      ],
+      "kind": "district_anchor",
+      "group": "districts",
+      "lat": 55.740702,
+      "lon": 36.860522,
+      "answerRadiusM": 600
+    },
+    {
+      "id": "zvg_micro_suponevo",
+      "name": "Микрорайон Супонево",
+      "alts": [
+        "Супонево"
+      ],
+      "kind": "district_anchor",
+      "group": "districts",
+      "lat": 55.744332,
+      "lon": 36.879407,
+      "answerRadiusM": 650
+    },
+    {
+      "id": "zvg_upper_posad",
+      "name": "Верхний Посад",
+      "alts": [
+        "мкр Верхний Посад"
+      ],
+      "kind": "district_anchor",
+      "group": "districts",
+      "lat": 55.725798,
+      "lon": 36.840112,
+      "answerRadiusM": 650
+    },
+    {
+      "id": "zvg_micro_vostochny",
+      "name": "Микрорайон Восточный",
+      "alts": [
+        "Восточный"
+      ],
+      "kind": "district_anchor",
+      "group": "districts",
+      "lat": 55.725119,
+      "lon": 36.873233,
+      "answerRadiusM": 700
+    }
   ]
 }

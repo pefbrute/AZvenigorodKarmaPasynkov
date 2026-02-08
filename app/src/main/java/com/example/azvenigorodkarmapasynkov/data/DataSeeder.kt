@@ -83,9 +83,12 @@ object DataSeeder {
             // But JSON only gives point. So all are POINT for now.
             // We can manually set some to Polygon later.
             
+            val imageName = obj.optString("imageName", null)
+            
             val item = QuizItem(
                 name = obj.getString("name"),
                 description = description,
+                imageName = imageName,
                 latitude = lat,
                 longitude = lon,
                 type = QuizType.POINT, // Defaulting to POINT as JSON has no geometry yet

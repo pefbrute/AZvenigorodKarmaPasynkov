@@ -26,6 +26,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.foundation.Image
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.azvenigorodkarmapasynkov.map.MapController
@@ -34,57 +37,99 @@ import org.osmdroid.views.MapView
 @Composable
 fun MapQuizScreen(viewModel: MapQuizViewModel) {
     val uiState by viewModel.uiState.collectAsState()
+    val gameMode by viewModel.gameMode.collectAsState()
     val context = LocalContext.current
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        AndroidView(
-            factory = { ctx ->
-                MapView(ctx).apply {
-                    val controller = MapController(ctx, this)
-                    controller.setOnlineMap() // Default for now, can switch to offline if file exists
-                    controller.centerMap(55.7288, 36.8166) // Zvenigorod center
+    if (gameMode == GameMode.MENU) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Zvenigorod Karma Quiz", style = MaterialTheme.typography.headlineMedium)
+            Spacer(modifier = Modifier.height(32.dp))
+            Button(
+                onClick = { viewModel.startGame(GameMode.MAP_QUIZ) },
+                modifier = Modifier.fillMaxWidth().height(56.dp)
+            ) {
+                Text("Map Quiz (Find location)")
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = { viewModel.startGame(GameMode.IMAGE_QUIZ) },
+                modifier = Modifier.fillMaxWidth().height(56.dp)
+            ) {
+                Text("Image Quiz (Guess place)")
+            }
+        }
+    } else {
+        Box(modifier = Modifier.fillMaxSize()) {
+            val currentQuestionState = uiState as? QuizState.Question
+        if (currentQuestionState != null && currentQuestionState.mode == QuizMode.IMAGE_GUESS) {
+            val item = currentQuestionState.item
+            val imageResId = context.resources.getIdentifier(item.imageName, "drawable", context.packageName)
+            if (imageResId != 0) {
+                Image(
+                    painter = painterResource(id = imageResId),
+                    contentDescription = item.name,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Box(modifier = Modifier.fillMaxSize().background(Color.Gray), contentAlignment = Alignment.Center) {
+                    Text("Image not found: ${item.imageName}", color = Color.White)
+                }
+            }
+        } else {
+            AndroidView(
+                factory = { ctx ->
+                    MapView(ctx).apply {
+                        val controller = MapController(ctx, this)
+                        controller.setOnlineMap() // Default for now, can switch to offline if file exists
+                        controller.centerMap(55.7288, 36.8166) // Zvenigorod center
+                        
+                        controller.setOnMapClickListener { geoPoint ->
+                            // Only handle clicks if in NAME_POKE mode
+                            val currentState = viewModel.uiState.value
+                            if (currentState is QuizState.Question && currentState.mode == QuizMode.NAME_POKE) {
+                                viewModel.submitLocation(geoPoint)
+                            }
+                        }
+                        tag = controller // store controller in tag to access later if needed
+                    }
+                },
+                update = { mapView ->
+                    val controller = mapView.tag as? MapController
                     
-                    controller.setOnMapClickListener { geoPoint ->
-                        // Only handle clicks if in NAME_POKE mode
-                        val currentState = viewModel.uiState.value
-                        if (currentState is QuizState.Question && currentState.mode == QuizMode.NAME_POKE) {
-                            viewModel.submitLocation(geoPoint)
+                    when (val state = uiState) {
+                        is QuizState.Question -> {
+                            controller?.clearMarkers()
+                            if (state.mode == QuizMode.SHOW_NAME) {
+                                controller?.addMarker(
+                                    state.item.latitude,
+                                    state.item.longitude,
+                                    "Where is this?"
+                                )
+                                controller?.centerMap(state.item.latitude, state.item.longitude, state.initialZoom.toDouble())
+                            }
                         }
-                    }
-                    tag = controller // store controller in tag to access later if needed
-                }
-            },
-            update = { mapView ->
-                val controller = mapView.tag as? MapController
-                
-                when (val state = uiState) {
-                    is QuizState.Question -> {
-                        controller?.clearMarkers()
-                        if (state.mode == QuizMode.SHOW_NAME) {
-                            controller?.addMarker(
-                                state.item.latitude,
-                                state.item.longitude,
-                                "Where is this?"
-                            )
-                            controller?.centerMap(state.item.latitude, state.item.longitude, state.initialZoom.toDouble())
+                        is QuizState.Result -> {
+                            controller?.clearMarkers()
+                            controller?.addMarker(state.item.latitude, state.item.longitude, state.item.name)
+                            state.userLocation?.let {
+                                controller?.addMarker(it.latitude, it.longitude, "Your Guess")
+                                controller?.drawLine(
+                                    org.osmdroid.util.GeoPoint(state.item.latitude, state.item.longitude),
+                                    it
+                                )
+                            }
                         }
+                        else -> {}
                     }
-                    is QuizState.Result -> {
-                        controller?.clearMarkers()
-                        controller?.addMarker(state.item.latitude, state.item.longitude, state.item.name)
-                        state.userLocation?.let {
-                            controller?.addMarker(it.latitude, it.longitude, "Your Guess")
-                            controller?.drawLine(
-                                org.osmdroid.util.GeoPoint(state.item.latitude, state.item.longitude),
-                                it
-                            )
-                        }
-                    }
-                    else -> {}
-                }
-            },
-            modifier = Modifier.fillMaxSize()
-        )
+                },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
 
         // Overlay UI
         Column(
@@ -103,8 +148,9 @@ fun MapQuizScreen(viewModel: MapQuizViewModel) {
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
-                            if (state.mode == QuizMode.SHOW_NAME) {
-                                Text("What is highlighted location?", style = MaterialTheme.typography.titleMedium)
+                            if (state.mode == QuizMode.SHOW_NAME || state.mode == QuizMode.IMAGE_GUESS) {
+                                val title = if (state.mode == QuizMode.IMAGE_GUESS) "What is this place?" else "What is highlighted location?"
+                                Text(title, style = MaterialTheme.typography.titleMedium)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 state.options.forEach { option ->
                                     Button(
@@ -155,4 +201,12 @@ fun MapQuizScreen(viewModel: MapQuizViewModel) {
             }
         }
     }
+        // Back button or Exit logic (simplified as overlay here)
+        Box(modifier = Modifier.fillMaxSize().padding(16.dp), contentAlignment = Alignment.TopStart) {
+             Button(onClick = { viewModel.backToMenu() }) {
+                 Text("Back to Menu")
+             }
+        }
+    }
 }
+

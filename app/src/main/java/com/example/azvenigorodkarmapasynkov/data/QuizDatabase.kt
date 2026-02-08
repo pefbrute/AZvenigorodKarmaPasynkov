@@ -16,8 +16,11 @@ interface QuizDao {
     @Query("SELECT * FROM quiz_items")
     fun getAllItems(): Flow<List<QuizItem>>
 
-    @Query("SELECT * FROM quiz_items WHERE nextReviewDate <= :currentTime")
-    fun getItemsDueForReview(currentTime: Long): Flow<List<QuizItem>>
+    @Query("SELECT * FROM quiz_items WHERE nextReviewDateMap <= :currentTime")
+    fun getItemsDueForMapReview(currentTime: Long): Flow<List<QuizItem>>
+
+    @Query("SELECT * FROM quiz_items WHERE nextReviewDateImage <= :currentTime")
+    fun getItemsDueForImageReview(currentTime: Long): Flow<List<QuizItem>>
 
     @Query("SELECT COUNT(*) FROM quiz_items")
     suspend fun getItemCount(): Int
@@ -46,7 +49,7 @@ interface QuizDao {
     ): List<QuizItem>
 }
 
-@Database(entities = [QuizItem::class], version = 3, exportSchema = false)
+@Database(entities = [QuizItem::class], version = 5, exportSchema = false)
 abstract class QuizDatabase : RoomDatabase() {
     abstract fun quizDao(): QuizDao
 
