@@ -84,6 +84,13 @@ object DataSeeder {
             // We can manually set some to Polygon later.
             
             val imageName = obj.optString("imageName", null)
+            val geometry = obj.optString("geometryData", "")
+            
+            val type = when {
+                geometry.isNotEmpty() && geometry.contains("[[") -> QuizType.POLYGON
+                kind == "district_anchor" || kind == "quarter" -> QuizType.POLYGON
+                else -> QuizType.POINT
+            }
             
             val item = QuizItem(
                 name = obj.getString("name"),
@@ -91,9 +98,9 @@ object DataSeeder {
                 imageName = imageName,
                 latitude = lat,
                 longitude = lon,
-                type = QuizType.POINT, // Defaulting to POINT as JSON has no geometry yet
+                type = type,
                 baseRadius = answerRadiusM,
-                geometryData = ""
+                geometryData = geometry
             )
             quizItems.add(item)
         }

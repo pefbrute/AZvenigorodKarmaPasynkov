@@ -255,7 +255,8 @@
       "group": "districts",
       "lat": 55.740702,
       "lon": 36.860522,
-      "answerRadiusM": 600
+      "answerRadiusM": 600,
+      "geometryData": "[[55.743,36.858],[55.743,36.863],[55.738,36.863],[55.738,36.858]]"
     },
     {
       "id": "zvg_micro_suponevo",

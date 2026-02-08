@@ -12,7 +12,9 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polygon
 import org.osmdroid.views.overlay.Polyline
+import android.graphics.Color
 import java.io.File
 
 class MapController(private val context: Context, private val mapView: MapView) {
@@ -68,7 +70,7 @@ class MapController(private val context: Context, private val mapView: MapView) 
     }
 
     fun clearMarkers() {
-        mapView.overlays.removeAll { it is Marker || it is Polyline }
+        mapView.overlays.removeAll { it is Marker || it is Polyline || it is Polygon }
         mapView.invalidate()
     }
 
@@ -94,5 +96,21 @@ class MapController(private val context: Context, private val mapView: MapView) 
          // Customize line color/width if needed
         mapView.overlays.add(line)
         mapView.invalidate()
+    }
+
+    fun drawPolygon(points: List<GeoPoint>, color: Int = Color.argb(80, 0, 0, 255)) {
+        if (points.isEmpty()) return
+        val polygon = Polygon()
+        polygon.points = points
+        polygon.fillPaint.color = color
+        polygon.outlinePaint.color = Color.BLUE
+        polygon.outlinePaint.strokeWidth = 2f
+        mapView.overlays.add(polygon)
+        mapView.invalidate()
+    }
+
+    fun drawCircle(center: GeoPoint, radiusMeters: Double, color: Int = Color.argb(80, 0, 0, 255)) {
+        val circlePoints = Polygon.pointsAsCircle(center, radiusMeters)
+        drawPolygon(circlePoints, color)
     }
 }

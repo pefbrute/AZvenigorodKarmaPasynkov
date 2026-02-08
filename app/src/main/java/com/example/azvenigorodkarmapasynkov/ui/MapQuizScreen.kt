@@ -32,6 +32,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.azvenigorodkarmapasynkov.map.MapController
+import com.example.azvenigorodkarmapasynkov.data.QuizType
+import com.example.azvenigorodkarmapasynkov.util.GeometryUtils
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 
 @Composable
@@ -105,6 +108,18 @@ fun MapQuizScreen(viewModel: MapQuizViewModel) {
                         is QuizState.Question -> {
                             controller?.clearMarkers()
                             if (state.mode == QuizMode.SHOW_NAME) {
+                                if (state.item.type == QuizType.POLYGON) {
+                                    val points = GeometryUtils.parseGeometry(state.item.geometryData)
+                                    if (points.isNotEmpty()) {
+                                        controller?.drawPolygon(points)
+                                    } else {
+                                        // Fallback to circle if no geometryData
+                                        controller?.drawCircle(
+                                            GeoPoint(state.item.latitude, state.item.longitude),
+                                            state.item.baseRadius.toDouble()
+                                        )
+                                    }
+                                }
                                 controller?.addMarker(
                                     state.item.latitude,
                                     state.item.longitude,
@@ -115,6 +130,17 @@ fun MapQuizScreen(viewModel: MapQuizViewModel) {
                         }
                         is QuizState.Result -> {
                             controller?.clearMarkers()
+                            if (state.item.type == QuizType.POLYGON) {
+                                val points = GeometryUtils.parseGeometry(state.item.geometryData)
+                                if (points.isNotEmpty()) {
+                                    controller?.drawPolygon(points)
+                                } else {
+                                    controller?.drawCircle(
+                                        GeoPoint(state.item.latitude, state.item.longitude),
+                                        state.item.baseRadius.toDouble()
+                                    )
+                                }
+                            }
                             controller?.addMarker(state.item.latitude, state.item.longitude, state.item.name)
                             state.userLocation?.let {
                                 controller?.addMarker(it.latitude, it.longitude, "Your Guess")
