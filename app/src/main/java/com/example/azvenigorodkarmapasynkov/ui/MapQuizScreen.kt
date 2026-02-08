@@ -72,12 +72,14 @@ fun MapQuizScreen(viewModel: MapQuizViewModel) {
             val item = currentQuestionState.item
             val imageResId = context.resources.getIdentifier(item.imageName, "drawable", context.packageName)
             if (imageResId != 0) {
-                Image(
-                    painter = painterResource(id = imageResId),
-                    contentDescription = item.name,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
+                Box(modifier = Modifier.fillMaxSize().background(Color.Black), contentAlignment = Alignment.Center) {
+                    Image(
+                        painter = painterResource(id = imageResId),
+                        contentDescription = item.name,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Fit
+                    )
+                }
             } else {
                 Box(modifier = Modifier.fillMaxSize().background(Color.Gray), contentAlignment = Alignment.Center) {
                     Text("Image not found: ${item.imageName}", color = Color.White)
