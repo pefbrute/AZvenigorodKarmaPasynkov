@@ -782,6 +782,28 @@
           "lon": 36.855967
         }
       ]
+    },
+    {
+      "id": "zvg_street_moskovskaya",
+      "name": "Московская улица",
+      "kind": "street",
+      "group": "streets",
+      "lat": 55.728738,
+      "lon": 36.862294,
+      "answerRadiusM": 150,
+      "geometryData": "[[55.7294,36.8485],[55.7301,36.8526],[55.7299,36.8568],[55.7287,36.8623],[55.7266,36.8741]]",
+      "imageName": "zveg_moskovskaya_1"
+    },
+    {
+      "id": "zvg_street_vasiliya_fabrichnova",
+      "name": "улица Василия Фабричнова",
+      "kind": "street",
+      "group": "streets",
+      "lat": 55.729471,
+      "lon": 36.855325,
+      "answerRadiusM": 120,
+      "geometryData": "[[55.727823,36.856149],[55.730211,36.854988],[55.732314,36.854199]]",
+      "imageName": "zveg_fabrichnova_1"
     }
   ]
 }
