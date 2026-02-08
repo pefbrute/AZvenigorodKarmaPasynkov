@@ -100,7 +100,7 @@ fun MapQuizScreen(viewModel: MapQuizViewModel) {
                 is QuizState.Question -> {
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f))
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             if (state.mode == QuizMode.SHOW_NAME) {
@@ -125,7 +125,7 @@ fun MapQuizScreen(viewModel: MapQuizViewModel) {
                 is QuizState.Result -> {
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f))
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(state.message, style = MaterialTheme.typography.titleMedium)
@@ -143,7 +143,14 @@ fun MapQuizScreen(viewModel: MapQuizViewModel) {
                     }
                 }
                 QuizState.Empty -> {
-                     Text("No quiz items available")
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                    ) {
+                        Box(modifier = Modifier.padding(16.dp)) {
+                            Text("No quiz items available")
+                        }
+                    }
                 }
             }
         }
