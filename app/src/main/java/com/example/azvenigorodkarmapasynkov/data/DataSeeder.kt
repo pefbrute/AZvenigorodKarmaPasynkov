@@ -116,7 +116,8 @@ object DataSeeder {
                     val imgLon = imgObj.optDouble("lon", lon)
                     val itemId = "${baseId}_$j"
                     
-                    if (repository.getItemById(itemId) == null) {
+                    val existing = repository.getItemById(itemId)
+                    if (existing == null) {
                         quizItems.add(QuizItem(
                             id = itemId,
                             name = obj.getString("name"),
@@ -128,11 +129,32 @@ object DataSeeder {
                             baseRadius = answerRadiusM,
                             geometryData = geometry
                         ))
+                    } else {
+                        // Check if metadata changed
+                        if (existing.name != obj.getString("name") || 
+                            existing.imageName != imgName || 
+                            existing.geometryData != geometry ||
+                            existing.latitude != imgLat ||
+                            existing.longitude != imgLon) {
+                            
+                            val updated = existing.copy(
+                                name = obj.getString("name"),
+                                imageName = imgName,
+                                geometryData = geometry,
+                                latitude = imgLat,
+                                longitude = imgLon,
+                                description = description,
+                                baseRadius = answerRadiusM,
+                                type = type
+                            )
+                            repository.updateItem(updated)
+                        }
                     }
                 }
             } else {
                 // Standard single-image item
-                if (repository.getItemById(baseId) == null) {
+                val existing = repository.getItemById(baseId)
+                if (existing == null) {
                     quizItems.add(QuizItem(
                         id = baseId,
                         name = obj.getString("name"),
@@ -144,6 +166,25 @@ object DataSeeder {
                         baseRadius = answerRadiusM,
                         geometryData = geometry
                     ))
+                } else {
+                    if (existing.name != obj.getString("name") || 
+                        existing.imageName != imageName || 
+                        existing.geometryData != geometry ||
+                        existing.latitude != lat ||
+                        existing.longitude != lon) {
+                        
+                        val updated = existing.copy(
+                            name = obj.getString("name"),
+                            imageName = imageName,
+                            geometryData = geometry,
+                            latitude = lat,
+                            longitude = lon,
+                            description = description,
+                            baseRadius = answerRadiusM,
+                            type = type
+                        )
+                        repository.updateItem(updated)
+                    }
                 }
             }
         }

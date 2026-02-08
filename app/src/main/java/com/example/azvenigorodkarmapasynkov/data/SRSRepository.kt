@@ -52,6 +52,10 @@ class SRSRepository(private val quizDao: QuizDao) {
     suspend fun addItem(item: QuizItem) {
         quizDao.insertItem(item)
     }
+
+    suspend fun updateItem(item: QuizItem) {
+        quizDao.updateItem(item)
+    }
     
     suspend fun addItems(items: List<QuizItem>) {
         quizDao.insertItems(items)
