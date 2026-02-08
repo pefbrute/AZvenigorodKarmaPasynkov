@@ -119,6 +119,11 @@ fun MapQuizScreen(viewModel: MapQuizViewModel) {
                                             state.item.baseRadius.toDouble()
                                         )
                                     }
+                                } else if (state.item.type == QuizType.LINE) {
+                                    val points = GeometryUtils.parseGeometry(state.item.geometryData)
+                                    if (points.isNotEmpty()) {
+                                        controller?.drawPolyline(points)
+                                    }
                                 }
                                 controller?.addMarker(
                                     state.item.latitude,
@@ -139,6 +144,11 @@ fun MapQuizScreen(viewModel: MapQuizViewModel) {
                                         GeoPoint(state.item.latitude, state.item.longitude),
                                         state.item.baseRadius.toDouble()
                                     )
+                                }
+                            } else if (state.item.type == QuizType.LINE) {
+                                val points = GeometryUtils.parseGeometry(state.item.geometryData)
+                                if (points.isNotEmpty()) {
+                                    controller?.drawPolyline(points)
                                 }
                             }
                             controller?.addMarker(state.item.latitude, state.item.longitude, state.item.name)

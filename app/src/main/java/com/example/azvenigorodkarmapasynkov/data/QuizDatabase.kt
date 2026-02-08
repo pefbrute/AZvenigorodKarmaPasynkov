@@ -35,12 +35,12 @@ interface QuizDao {
     suspend fun updateItem(item: QuizItem)
     
     @Query("SELECT * FROM quiz_items WHERE id = :id")
-    suspend fun getItemById(id: Long): QuizItem?
+    suspend fun getItemById(id: String): QuizItem?
 
     @Query("SELECT * FROM quiz_items WHERE type = :type AND id != :excludeId AND latitude BETWEEN :minLat AND :maxLat AND longitude BETWEEN :minLon AND :maxLon ORDER BY RANDOM() LIMIT :limit")
     suspend fun getNearbyItems(
         type: QuizType, 
-        excludeId: Long, 
+        excludeId: String, 
         minLat: Double, 
         maxLat: Double, 
         minLon: Double, 
@@ -49,7 +49,7 @@ interface QuizDao {
     ): List<QuizItem>
 }
 
-@Database(entities = [QuizItem::class], version = 5, exportSchema = false)
+@Database(entities = [QuizItem::class], version = 6, exportSchema = false)
 abstract class QuizDatabase : RoomDatabase() {
     abstract fun quizDao(): QuizDao
 

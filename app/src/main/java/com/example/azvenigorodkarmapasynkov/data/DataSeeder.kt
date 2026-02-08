@@ -83,7 +83,7 @@ object DataSeeder {
             // But JSON only gives point. So all are POINT for now.
             // We can manually set some to Polygon later.
             
-            val imageName = obj.optString("imageName", null)
+            val imageName = if (obj.isNull("imageName")) null else obj.getString("imageName")
             var geometry = obj.optString("geometryData", "")
             
             // Handle new "area" object format if geometryData is missing
@@ -100,20 +100,52 @@ object DataSeeder {
             val type = when {
                 geometry.isNotEmpty() && (geometry.contains("[[") || geometry.contains("[")) -> QuizType.POLYGON
                 kind == "district_anchor" || kind == "quarter" -> QuizType.POLYGON
+                kind == "street" || kind == "road" -> QuizType.LINE
                 else -> QuizType.POINT
             }
             
-            val item = QuizItem(
-                name = obj.getString("name"),
-                description = description,
-                imageName = imageName,
-                latitude = lat,
-                longitude = lon,
-                type = type,
-                baseRadius = answerRadiusM,
-                geometryData = geometry
-            )
-            quizItems.add(item)
+            val imagesArr = obj.optJSONArray("images")
+            val baseId = obj.getString("id")
+            
+            if (imagesArr != null && imagesArr.length() > 0) {
+                // Multi-image item: create a QuizItem for each image
+                for (j in 0 until imagesArr.length()) {
+                    val imgObj = imagesArr.getJSONObject(j)
+                    val imgName = imgObj.getString("imageName")
+                    val imgLat = imgObj.optDouble("lat", lat)
+                    val imgLon = imgObj.optDouble("lon", lon)
+                    val itemId = "${baseId}_$j"
+                    
+                    if (repository.getItemById(itemId) == null) {
+                        quizItems.add(QuizItem(
+                            id = itemId,
+                            name = obj.getString("name"),
+                            description = description,
+                            imageName = imgName,
+                            latitude = imgLat,
+                            longitude = imgLon,
+                            type = type,
+                            baseRadius = answerRadiusM,
+                            geometryData = geometry
+                        ))
+                    }
+                }
+            } else {
+                // Standard single-image item
+                if (repository.getItemById(baseId) == null) {
+                    quizItems.add(QuizItem(
+                        id = baseId,
+                        name = obj.getString("name"),
+                        description = description,
+                        imageName = imageName,
+                        latitude = lat,
+                        longitude = lon,
+                        type = type,
+                        baseRadius = answerRadiusM,
+                        geometryData = geometry
+                    ))
+                }
+            }
         }
         
         repository.addItems(quizItems)

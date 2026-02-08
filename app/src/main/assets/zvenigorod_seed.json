@@ -760,6 +760,17 @@
           "url": "https://wikimapia.org/2548809/ru/%D0%9C%D0%B8%D0%BA%D1%80%D0%BE%D1%80%D0%B0%D0%B9%D0%BE%D0%BD-%D0%92%D0%BE%D1%81%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9"
         }
       }
+    },
+    {
+      "id": "zvg_street_proletarskaya",
+      "name": "Пролетарская улица",
+      "kind": "street",
+      "group": "streets",
+      "lat": 55.733253,
+      "lon": 36.853931,
+      "answerRadiusM": 150,
+      "geometryData": "[[55.732520,36.840847],[55.732731,36.844621],[55.733113,36.852102],[55.733253,36.853931],[55.734491,36.858451]]",
+      "imageName": "zveg_proletarskaya"
     }
   ]
 }

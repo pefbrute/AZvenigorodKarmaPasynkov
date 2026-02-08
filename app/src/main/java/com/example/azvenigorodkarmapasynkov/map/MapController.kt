@@ -93,8 +93,17 @@ class MapController(private val context: Context, private val mapView: MapView) 
         val line = Polyline()
         line.addPoint(from)
         line.addPoint(to)
-         // Customize line color/width if needed
         mapView.overlays.add(line)
+        mapView.invalidate()
+    }
+
+    fun drawPolyline(points: List<GeoPoint>, color: Int = Color.BLUE) {
+        if (points.isEmpty()) return
+        val polyline = Polyline()
+        polyline.setPoints(points)
+        polyline.outlinePaint.color = color
+        polyline.outlinePaint.strokeWidth = 10f
+        mapView.overlays.add(polyline)
         mapView.invalidate()
     }
 

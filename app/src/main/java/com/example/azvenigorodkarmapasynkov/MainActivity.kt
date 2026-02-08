@@ -29,11 +29,9 @@ class MainActivity : ComponentActivity() {
         val factory = MapQuizViewModelFactory(repository)
         val viewModel = ViewModelProvider(this, factory)[MapQuizViewModel::class.java]
 
-        // Seed data if empty
+        // Seed data (checks for new items inside)
         lifecycleScope.launch {
-            if (repository.isEmpty()) {
-                DataSeeder.populateDatabase(this@MainActivity, repository)
-            }
+            DataSeeder.populateDatabase(this@MainActivity, repository)
         }
 
         setContent {

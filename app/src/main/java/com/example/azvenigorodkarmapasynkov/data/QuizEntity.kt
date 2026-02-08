@@ -11,7 +11,7 @@ enum class QuizType {
 @Entity(tableName = "quiz_items")
 @Serializable
 data class QuizItem(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey val id: String,
     val name: String,
     val description: String = "",
     val imageName: String? = null, // Name of drawable resource
