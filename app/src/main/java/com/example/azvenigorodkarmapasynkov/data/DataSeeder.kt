@@ -84,10 +84,21 @@ object DataSeeder {
             // We can manually set some to Polygon later.
             
             val imageName = obj.optString("imageName", null)
-            val geometry = obj.optString("geometryData", "")
+            var geometry = obj.optString("geometryData", "")
+            
+            // Handle new "area" object format if geometryData is missing
+            if (geometry.isEmpty()) {
+                val areaObj = obj.optJSONObject("area")
+                if (areaObj != null) {
+                    val pointsArr = areaObj.optJSONArray("points")
+                    if (pointsArr != null) {
+                        geometry = pointsArr.toString()
+                    }
+                }
+            }
             
             val type = when {
-                geometry.isNotEmpty() && geometry.contains("[[") -> QuizType.POLYGON
+                geometry.isNotEmpty() && (geometry.contains("[[") || geometry.contains("[")) -> QuizType.POLYGON
                 kind == "district_anchor" || kind == "quarter" -> QuizType.POLYGON
                 else -> QuizType.POINT
             }
