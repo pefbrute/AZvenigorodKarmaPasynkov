@@ -890,12 +890,22 @@
       "lat": 55.735641,
       "lon": 36.858484,
       "answerRadiusM": 120,
-      "geometryData": "[[55.735641,36.858484]]",
+      "geometryData": "[[55.735924,36.856579],[55.735641,36.858484],[55.734608,36.866461]]",
       "images": [
         {
           "imageName": "zveg_sovetskaya_1",
           "lat": 55.735641,
           "lon": 36.858484
+        },
+        {
+          "imageName": "zveg_sovetskaya_2",
+          "lat": 55.734608,
+          "lon": 36.866461
+        },
+        {
+          "imageName": "zveg_sovetskaya_3",
+          "lat": 55.735924,
+          "lon": 36.856579
         }
       ]
     },
@@ -907,7 +917,7 @@
       "lat": 55.735506,
       "lon": 36.861187,
       "answerRadiusM": 120,
-      "geometryData": "[[55.735506,36.861187],[55.730455,36.859091],[55.730023,36.858889]]",
+      "geometryData": "[[55.735506,36.861187],[55.730852,36.859260],[55.730455,36.859091],[55.730023,36.858889]]",
       "images": [
         {
           "imageName": "zveg_nekrasova_1",
@@ -923,6 +933,11 @@
           "imageName": "zveg_nekrasova_3",
           "lat": 55.730023,
           "lon": 36.858889
+        },
+        {
+          "imageName": "zveg_nekrasova_4",
+          "lat": 55.730852,
+          "lon": 36.859260
         }
       ]
     }
