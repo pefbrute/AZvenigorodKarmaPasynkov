@@ -791,7 +791,7 @@
       "lat": 55.728738,
       "lon": 36.862294,
       "answerRadiusM": 150,
-      "geometryData": "[[55.7294,36.8485],[55.7301,36.8526],[55.730180,36.854676],[55.7299,36.8568],[55.729293,36.860276],[55.7287,36.8623],[55.7266,36.8741]]",
+      "geometryData": "[[55.7294,36.8485],[55.7301,36.8526],[55.730472,36.852126],[55.730180,36.854676],[55.729933,36.856679],[55.7299,36.8568],[55.729293,36.860276],[55.7287,36.8623],[55.7266,36.8741]]",
       "images": [
         {
           "imageName": "zveg_moskovskaya_1",
@@ -807,6 +807,16 @@
           "imageName": "zveg_moskovskaya_3",
           "lat": 55.729293,
           "lon": 36.860276
+        },
+        {
+          "imageName": "zveg_moskovskaya_4",
+          "lat": 55.729933,
+          "lon": 36.856679
+        },
+        {
+          "imageName": "zveg_moskovskaya_5",
+          "lat": 55.730472,
+          "lon": 36.852126
         }
       ]
     },
@@ -869,6 +879,50 @@
           "imageName": "zveg_frunze_1",
           "lat": 55.730826,
           "lon": 36.848162
+        }
+      ]
+    },
+    {
+      "id": "zvg_street_sovetskaya",
+      "name": "Советская улица",
+      "kind": "street",
+      "group": "streets",
+      "lat": 55.735641,
+      "lon": 36.858484,
+      "answerRadiusM": 120,
+      "geometryData": "[[55.735641,36.858484]]",
+      "images": [
+        {
+          "imageName": "zveg_sovetskaya_1",
+          "lat": 55.735641,
+          "lon": 36.858484
+        }
+      ]
+    },
+    {
+      "id": "zvg_street_nekrasova",
+      "name": "улица Некрасова",
+      "kind": "street",
+      "group": "streets",
+      "lat": 55.735506,
+      "lon": 36.861187,
+      "answerRadiusM": 120,
+      "geometryData": "[[55.735506,36.861187],[55.730455,36.859091],[55.730023,36.858889]]",
+      "images": [
+        {
+          "imageName": "zveg_nekrasova_1",
+          "lat": 55.735506,
+          "lon": 36.861187
+        },
+        {
+          "imageName": "zveg_nekrasova_2",
+          "lat": 55.730455,
+          "lon": 36.859091
+        },
+        {
+          "imageName": "zveg_nekrasova_3",
+          "lat": 55.730023,
+          "lon": 36.858889
         }
       ]
     }
