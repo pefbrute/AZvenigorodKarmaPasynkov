@@ -791,8 +791,24 @@
       "lat": 55.728738,
       "lon": 36.862294,
       "answerRadiusM": 150,
-      "geometryData": "[[55.7294,36.8485],[55.7301,36.8526],[55.7299,36.8568],[55.7287,36.8623],[55.7266,36.8741]]",
-      "imageName": "zveg_moskovskaya_1"
+      "geometryData": "[[55.7294,36.8485],[55.7301,36.8526],[55.730180,36.854676],[55.7299,36.8568],[55.729293,36.860276],[55.7287,36.8623],[55.7266,36.8741]]",
+      "images": [
+        {
+          "imageName": "zveg_moskovskaya_1",
+          "lat": 55.728738,
+          "lon": 36.862294
+        },
+        {
+          "imageName": "zveg_moskovskaya_2",
+          "lat": 55.730180,
+          "lon": 36.854676
+        },
+        {
+          "imageName": "zveg_moskovskaya_3",
+          "lat": 55.729293,
+          "lon": 36.860276
+        }
+      ]
     },
     {
       "id": "zvg_street_vasiliya_fabrichnova",
@@ -804,6 +820,57 @@
       "answerRadiusM": 120,
       "geometryData": "[[55.727823,36.856149],[55.730211,36.854988],[55.732314,36.854199]]",
       "imageName": "zveg_fabrichnova_1"
+    },
+    {
+      "id": "zvg_street_ignatevskaya",
+      "name": "Игнатьевская улица",
+      "kind": "street",
+      "group": "streets",
+      "lat": 55.728969,
+      "lon": 36.860696,
+      "answerRadiusM": 120,
+      "geometryData": "[[55.728969,36.860696]]",
+      "images": [
+        {
+          "imageName": "zveg_ignatevskaya_1",
+          "lat": 55.728969,
+          "lon": 36.860696
+        }
+      ]
+    },
+    {
+      "id": "zvg_street_pochtovaya",
+      "name": "Почтовая улица",
+      "kind": "street",
+      "group": "streets",
+      "lat": 55.732141,
+      "lon": 36.854573,
+      "answerRadiusM": 120,
+      "geometryData": "[[55.732141,36.854573]]",
+      "images": [
+        {
+          "imageName": "zveg_pochtovaya_1",
+          "lat": 55.732141,
+          "lon": 36.854573
+        }
+      ]
+    },
+    {
+      "id": "zvg_street_frunze",
+      "name": "улица Фрунзе",
+      "kind": "street",
+      "group": "streets",
+      "lat": 55.730826,
+      "lon": 36.848162,
+      "answerRadiusM": 120,
+      "geometryData": "[[55.730826,36.848162]]",
+      "images": [
+        {
+          "imageName": "zveg_frunze_1",
+          "lat": 55.730826,
+          "lon": 36.848162
+        }
+      ]
     }
   ]
 }
