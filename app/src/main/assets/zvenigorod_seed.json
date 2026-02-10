@@ -890,7 +890,7 @@
       "lat": 55.735641,
       "lon": 36.858484,
       "answerRadiusM": 120,
-      "geometryData": "[[55.735924,36.856579],[55.735641,36.858484],[55.734608,36.866461]]",
+      "geometryData": "[[55.735924,36.856579],[55.735641,36.858484],[55.735043,36.862615],[55.734608,36.866461]]",
       "images": [
         {
           "imageName": "zveg_sovetskaya_1",
@@ -906,6 +906,11 @@
           "imageName": "zveg_sovetskaya_3",
           "lat": 55.735924,
           "lon": 36.856579
+        },
+        {
+          "imageName": "zveg_sovetskaya_4",
+          "lat": 55.735043,
+          "lon": 36.862615
         }
       ]
     },
@@ -938,6 +943,40 @@
           "imageName": "zveg_nekrasova_4",
           "lat": 55.730852,
           "lon": 36.859260
+        }
+      ]
+    },
+    {
+      "id": "zvg_street_gercena",
+      "name": "улица Герцена",
+      "kind": "street",
+      "group": "streets",
+      "lat": 55.737239,
+      "lon": 36.856376,
+      "answerRadiusM": 120,
+      "geometryData": "[[55.737239,36.856376]]",
+      "images": [
+        {
+          "imageName": "zveg_gercena_1",
+          "lat": 55.737239,
+          "lon": 36.856376
+        }
+      ]
+    },
+    {
+      "id": "zvg_street_sportivnaya",
+      "name": "Спортивная улица",
+      "kind": "street",
+      "group": "streets",
+      "lat": 55.738490,
+      "lon": 36.853609,
+      "answerRadiusM": 120,
+      "geometryData": "[[55.738490, 36.853609]]",
+      "images": [
+        {
+          "imageName": "zveg_sportivnaya_1",
+          "lat": 55.738490,
+          "lon": 36.853609
         }
       ]
     }
