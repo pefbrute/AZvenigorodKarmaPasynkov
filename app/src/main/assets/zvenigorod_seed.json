@@ -979,6 +979,23 @@
           "lon": 36.853609
         }
       ]
+    },
+    {
+      "id": "zvg_street_lermontova",
+      "name": "улица Лермонтова",
+      "kind": "street",
+      "group": "streets",
+      "lat": 55.741472,
+      "lon": 36.850095,
+      "answerRadiusM": 120,
+      "geometryData": "[[55.741472, 36.850095]]",
+      "images": [
+        {
+          "imageName": "zveg_lermontova_1",
+          "lat": 55.741472,
+          "lon": 36.850095
+        }
+      ]
     }
   ]
 }
